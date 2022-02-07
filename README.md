@@ -1,6 +1,8 @@
+一個協助用戶快速進行圖像分類標示的小工具.
+
 第一次嘗試使用 github, 非典型使用方式.
 相關說明暫時放置於 https://www.zoominonline.com/dev
-未來補加程式 Documentation, Testing Code 再繼續 commit.
+未來補加程式文件, 單元測試後會持續更新.
 
 簡易使用: 於 Python 3.9 
 python -m venv c:\venv\ps6 #建立一個被命名為 ps6 的 Python 虛擬環境
