@@ -4,9 +4,11 @@
 相關說明暫時放置於 https://www.zoominonline.com/dev
 未來補加程式文件, 單元測試後會持續更新.
 
-簡易使用: 於 Python 3.9 
+簡易使用: 於 Python 3.9
+```
 pip install pyside6 Pillow
-
+```
 假設要做標示的所有圖像檔都放置於 C:\YOUR IMAGES 目錄下
-
+```
 python main.py 'C:\YOUR IMAGES'
+```
