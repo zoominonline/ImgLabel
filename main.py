@@ -8,15 +8,16 @@ from models import WorkFolder
 from models import winH, winW, imgH, imgW, strbtnstylesys
 
 class MainWindow(QWidget):
-    def __init__(self, workFolder: WorkFolder, width=1150, height=810, imgWidth=800, imgHeight=800):
+    def __init__(self, workFolder: WorkFolder):
         super().__init__()
-        self.setFixedSize(QSize(width, height))
+        self.setMaximumSize(QSize(winW, winH))
         self.workFolder=workFolder
         layout=QHBoxLayout()
         panelsLayout=QVBoxLayout()
         self.setLayout(layout)
         self.setWindowTitle(str(workFolder))
-        self.imgLabel=ClassifyImgLabel(workFolder,imgWidth,imgHeight,self)
+        self.imgLabel=ClassifyImgLabel(workFolder,self)
+        self.imgLabel.setFixedSize(QSize(imgW, imgH))
         self.activityPanel=ClassifyActivityBtns(workFolder,self)
         self.infoPanel=InfoPanel(workFolder,self)
         layout.addWidget(self.imgLabel)
@@ -50,7 +51,7 @@ if __name__ == "__main__":
     if len(sys.argv)==2:
         wf=WorkFolder(sys.argv[1])
         if wf:
-            win=MainWindow(wf, winW, winH, imgW, imgH)
+            win=MainWindow(wf)
             win.show()
             app.exec()
         else:

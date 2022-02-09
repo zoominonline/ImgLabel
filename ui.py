@@ -1,14 +1,15 @@
 from PySide6.QtWidgets import (QWidget, QButtonGroup,
-            QLabel, QVBoxLayout, QPushButton, QLineEdit)
+            QLabel, QVBoxLayout, QPushButton, QLineEdit,QSizePolicy,QFrame)
 from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtCore import QSize,Qt
 from models import WorkFolder
 from models import classes,strlblstyle, winW, imgW, imgH
 
 class ClassifyImgLabel(QLabel):
-    def __init__(self, workFolder: WorkFolder, width=1000, height=1000, parent=None):
+    def __init__(self, workFolder: WorkFolder, parent=None):
         super().__init__(parent)
-        self.setFixedSize(QSize(width, height))
+        
+        self.setMaximumSize(QSize(imgW, imgH))
         self.setStyleSheet("border: 1px inset grey;")
         self.setAlignment(Qt.AlignCenter)
         #self.setScaledContents(True)
@@ -20,7 +21,8 @@ class ClassifyImgLabel(QLabel):
         if imgPath:
             pix=QPixmap()
             pix.load(imgPath)
-            pix=pix.scaled(imgW, imgH, Qt.KeepAspectRatio)
+            if pix.width()>imgW or pix.height()>imgH:
+                pix=pix.scaled(imgW, imgH, Qt.KeepAspectRatio)
             self.setPixmap(pix)
         else:
             self.setFont(QFont('Arial', 20))
@@ -32,11 +34,12 @@ in {str(self.workFolder)},
 Select another directory that 
 CONTAINs IMAGEs to work!""")
 
-class ClassifyActivityBtns(QWidget):
+class ClassifyActivityBtns(QFrame):
     def __init__(self, workFolder: WorkFolder, parent=None):
         super().__init__(parent)
         layout=QVBoxLayout()
         self.setLayout(layout)
+        
         self.parent=parent
         self.workFolder=workFolder
         self.buttonRoll = QPushButton('Roll(back')
@@ -57,6 +60,7 @@ class ClassifyActivityBtns(QWidget):
             self.cls_group.addButton(classifiedBtn, id)
             id +=1            
         self.cls_group.buttonClicked.connect(self.classifiedTo)
+        
         self.checkCurrentImg()
     
     def classifiedTo(self, object):
@@ -75,9 +79,9 @@ class ClassifyActivityBtns(QWidget):
             self._disableClassify()
 
     def _disableClassify(self):
-        
         for b in self.cls_group.buttons():
             b.setDisabled(True)
+
     def _enableClassify(self):
         for b in self.cls_group.buttons():
             b.setDisabled(False)
@@ -135,4 +139,3 @@ class InfoPanel(QWidget):
         #current=1 if self.workFolder.getCurrentName() else 0
         self.remains.setText(str(len(self.workFolder.remains)))
         self.labeled.setText(self.workFolder.getLabeledCountStr())
-
