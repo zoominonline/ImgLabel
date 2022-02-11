@@ -53,13 +53,14 @@ if __name__ == "__main__":
     app = QApplication([])
     if len(sys.argv)==2:
         wf=WorkFolder(sys.argv[1])
-        screenRect = QApplication.instance().screens()[0].availableSize()
-        screenH= screenRect.height()
-        screenW = screenRect.width()
-        if winH < screenH or winW < screenW:
-            screenH=winH
-            screenW=winW
         if wf:
+            screenRect = QApplication.instance().screens()[0].availableSize()
+            screenH= screenRect.height()
+            screenW = screenRect.width()
+            #當 config.ini 視窗設定winW,winH大小大於螢幕可用尺寸時, 降低為螢幕可用尺寸
+            if winH < screenH or winW < screenW:
+                screenH=winH
+                screenW=winW
             win=MainWindow(wf, screenW, screenH)
             win.show()
             app.exec()
