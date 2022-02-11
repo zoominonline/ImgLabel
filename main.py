@@ -1,5 +1,5 @@
 import sys, os, subprocess
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize,QPoint
 from PySide6.QtWidgets import ( QApplication, QWidget, 
              QVBoxLayout, QHBoxLayout, QPushButton,QFrame
 )
@@ -30,7 +30,7 @@ class MainWindow(QWidget):
         panelsLayout.addWidget(self.infoPanel)
         line = QFrame()
         line.setFrameShape(QFrame.HLine)
-        #panelsLayout.addStretch()
+        
         panelsLayout.addWidget(line)
         panelsLayout.addWidget(self.activityPanel)
         openBtn = QPushButton('Open Work Folder')
@@ -57,14 +57,16 @@ if __name__ == "__main__":
         wf=WorkFolder(sys.argv[1])
         if wf:
             screenRect = QApplication.instance().screens()[0].availableSize()
-            screenH= screenRect.height()
-            screenW = screenRect.width()
+            screenW, screenH= screenRect.width(), screenRect.height()
+            
+            print('screenW, screenH= ', screenW, screenH)
             #當 config.ini 視窗設定winW,winH大小大於螢幕可用尺寸時, 降低為螢幕可用尺寸
-            if winH < screenH or winW < screenW:
+            if winH < screenH and winW < screenW:
                 screenH=winH
                 screenW=winW
             win=MainWindow(wf, screenW, screenH)
             win.show()
+            win.move(QPoint(0,0))
             app.exec()
         else:
             print("""Please select a Directory containing at least one image to be labled!""")
