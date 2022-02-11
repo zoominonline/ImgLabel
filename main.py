@@ -16,11 +16,13 @@ class MainWindow(QWidget):
         panelsLayout=QVBoxLayout()
         self.setLayout(layout)
         self.setWindowTitle(str(workFolder))
-        if imgH>height*0.8 or imgW>width*0.8:
-            self.imgLabel=ClassifyImgLabel(workFolder, int(height*0.8), int(height*0.8),self)
+        if imgH>height*0.9 or imgW>width*0.8:
+            wgtW=int(width*0.8)
+            wgtH=int(height*0.9)
         else:
-            self.imgLabel=ClassifyImgLabel(workFolder, imgH, imgW,self)
-        self.imgLabel.setFixedSize(QSize(imgW, imgH))
+            wgtW, wgtH= imgW, imgH
+        self.imgLabel=ClassifyImgLabel(workFolder, wgtW, wgtH, self)
+        self.imgLabel.setFixedSize(QSize(wgtW, wgtH))
         self.activityPanel=ClassifyActivityBtns(workFolder,self)
         self.infoPanel=InfoPanel(workFolder,self)
         layout.addWidget(self.imgLabel)

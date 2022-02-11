@@ -8,9 +8,7 @@ from models import classes,strlblstyle
 class ClassifyImgLabel(QLabel):
     def __init__(self, workFolder: WorkFolder, width, height, parent=None):
         super().__init__(parent)
-        self.width=width
-        self.height=height
-        self.setMaximumSize(QSize(width, height))
+        self.width, self.height = width, height
         self.setStyleSheet("border: 1px inset grey;")
         self.setAlignment(Qt.AlignCenter)
         self.workFolder=workFolder
