@@ -8,15 +8,18 @@ from models import WorkFolder
 from models import winH, winW, imgH, imgW, strbtnstylesys
 
 class MainWindow(QWidget):
-    def __init__(self, workFolder: WorkFolder):
+    def __init__(self, workFolder: WorkFolder, width, height):
         super().__init__()
-        self.setMaximumSize(QSize(winW, winH))
+        self.setMaximumSize(QSize(width, height))
         self.workFolder=workFolder
         layout=QHBoxLayout()
         panelsLayout=QVBoxLayout()
         self.setLayout(layout)
         self.setWindowTitle(str(workFolder))
-        self.imgLabel=ClassifyImgLabel(workFolder,self)
+        if imgH>height*0.8 or imgW>width*0.8:
+            self.imgLabel=ClassifyImgLabel(workFolder, int(height*0.8), int(height*0.8),self)
+        else:
+            self.imgLabel=ClassifyImgLabel(workFolder, imgH, imgW,self)
         self.imgLabel.setFixedSize(QSize(imgW, imgH))
         self.activityPanel=ClassifyActivityBtns(workFolder,self)
         self.infoPanel=InfoPanel(workFolder,self)
@@ -50,8 +53,14 @@ if __name__ == "__main__":
     app = QApplication([])
     if len(sys.argv)==2:
         wf=WorkFolder(sys.argv[1])
+        screenRect = QApplication.instance().screens()[0].availableSize()
+        screenH= screenRect.height()
+        screenW = screenRect.width()
+        if winH < screenH or winW < screenW:
+            screenH=winH
+            screenW=winW
         if wf:
-            win=MainWindow(wf)
+            win=MainWindow(wf, screenW, screenH)
             win.show()
             app.exec()
         else:

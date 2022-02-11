@@ -1,18 +1,18 @@
 from PySide6.QtWidgets import (QWidget, QButtonGroup,
-            QLabel, QVBoxLayout, QPushButton, QLineEdit,QSizePolicy,QFrame)
+            QLabel, QVBoxLayout, QPushButton, QLineEdit,QFrame)
 from PySide6.QtGui import QPixmap, QFont
 from PySide6.QtCore import QSize,Qt
 from models import WorkFolder
-from models import classes,strlblstyle, winW, imgW, imgH
+from models import classes,strlblstyle
 
 class ClassifyImgLabel(QLabel):
-    def __init__(self, workFolder: WorkFolder, parent=None):
+    def __init__(self, workFolder: WorkFolder, width, height, parent=None):
         super().__init__(parent)
-        
-        self.setMaximumSize(QSize(imgW, imgH))
+        self.width=width
+        self.height=height
+        self.setMaximumSize(QSize(width, height))
         self.setStyleSheet("border: 1px inset grey;")
         self.setAlignment(Qt.AlignCenter)
-        #self.setScaledContents(True)
         self.workFolder=workFolder
         self.refreshImg()
 
@@ -21,8 +21,8 @@ class ClassifyImgLabel(QLabel):
         if imgPath:
             pix=QPixmap()
             pix.load(imgPath)
-            if pix.width()>imgW or pix.height()>imgH:
-                pix=pix.scaled(imgW, imgH, Qt.KeepAspectRatio)
+            if pix.width()>self.width or pix.height()>self.height:
+                pix=pix.scaled(self.width, self.height, Qt.KeepAspectRatio)
             self.setPixmap(pix)
         else:
             self.setFont(QFont('Arial', 20))
@@ -39,7 +39,6 @@ class ClassifyActivityBtns(QFrame):
         super().__init__(parent)
         layout=QVBoxLayout()
         self.setLayout(layout)
-        
         self.parent=parent
         self.workFolder=workFolder
         self.buttonRoll = QPushButton('Roll(back')
@@ -47,7 +46,6 @@ class ClassifyActivityBtns(QFrame):
         self.buttonRoll.clicked.connect(self.rollback)
         self.buttonRoll.setDisabled(True)
         layout.addWidget(self.buttonRoll)
-        #layout.addStretch(1)
         
         self.cls_group = QButtonGroup()
         self.keys=[]
@@ -60,12 +58,10 @@ class ClassifyActivityBtns(QFrame):
             self.cls_group.addButton(classifiedBtn, id)
             id +=1            
         self.cls_group.buttonClicked.connect(self.classifiedTo)
-        
         self.checkCurrentImg()
     
     def classifiedTo(self, object):
         clsId=self.cls_group.id(object)
-        #print('Button Clicked, key=', clsId, self.keys[clsId])
         self.workFolder.labelCurrentImg(self.keys[clsId])
         self.parent.imgLabel.refreshImg()
         self.parent.infoPanel.refreshPanel()
@@ -108,7 +104,6 @@ class InfoPanel(QWidget):
     
         currentLabel=QLabel('Current Img:')
         self.current=QLineEdit('-')
-        self.current.setFixedSize(winW-imgW-40,40)
         self.current.setReadOnly(True)
         self.imgSize=QLabel('-')
         historyLabel=QLabel('Label History:')
@@ -136,6 +131,5 @@ class InfoPanel(QWidget):
         self.current.setText(self.workFolder.getCurrentName())
         self.imgSize.setText(self.workFolder.getCurrentSize())
         self.history.setText(str(len(self.workFolder.history)))
-        #current=1 if self.workFolder.getCurrentName() else 0
         self.remains.setText(str(len(self.workFolder.remains)))
         self.labeled.setText(self.workFolder.getLabeledCountStr())
