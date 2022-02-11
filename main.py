@@ -62,8 +62,8 @@ if __name__ == "__main__":
             print('screenW, screenH= ', screenW, screenH)
             #當 config.ini 視窗設定winW,winH大小大於螢幕可用尺寸時, 降低為螢幕可用尺寸
             if winH < screenH and winW < screenW:
-                screenH=winH
-                screenW=winW
+                screenW, screenH=winW, winH
+
             win=MainWindow(wf, screenW, screenH)
             win.show()
             win.move(QPoint(0,0))
