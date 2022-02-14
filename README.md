@@ -3,10 +3,10 @@
 第一次嘗試使用 github, 非典型使用方式.
 相關說明暫時放置於 https://www.zoominonline.com/dev
 未來補加程式文件, 單元測試後會持續更新.
-'''
+```
 git clone https://github.com/zoominonline/ImgLabel.git
 cd ImgLabel
-'''
+```
 
 使用前必須先修訂 config.ini 檔案 [class] 段落裡的關於快速鍵與類別的名稱對應關係.
 
